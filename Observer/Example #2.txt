@@ -1,0 +1,100 @@
+package test;
+
+import java.util.ArrayList;
+
+
+public class Test {
+    
+    public static void main (String [] args) {
+        WeatherData weatherData = new WeatherData();
+        CurrentConditionsDisplay ccd = new CurrentConditionsDisplay(weatherData);
+        weatherData.setMeasurement(29f, 65f, 745);
+        weatherData.setMeasurement(39f, 70f, 760);
+        weatherData.setMeasurement(42f, 72f, 763);
+    }
+    
+}
+
+
+
+interface Observer {
+    
+    public void update(float temperature,float humidity, int pressure);
+    
+}
+
+
+
+interface Observable {
+    
+    public void registerObserver(Observer observer);
+    public void removeObserver(Observer observer);
+    public void notifyObservers();
+    
+}
+
+
+
+class WeatherData implements Observable {
+
+    private ArrayList<Observer> observers;
+    private float temperature;
+    private float humidity;
+    private int pressure;
+    
+    public WeatherData() {
+        observers = new ArrayList<>();
+    }
+    
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer o : observers) {
+            o.update(temperature, humidity, pressure);
+        }
+    }
+    
+    public void setMeasurement(float temperature,float humidity, int pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        notifyObservers();
+    }
+
+}
+
+
+
+class CurrentConditionsDisplay implements Observer {
+        
+    private WeatherData weatherData;
+    private float temperature;
+    private float humidity;
+    private int pressure;
+
+    public CurrentConditionsDisplay(WeatherData weatherData) {
+        this.weatherData = weatherData;
+        weatherData.registerObserver(this);
+    }
+
+    @Override
+    public void update(float temperature, float humidity, int pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        display();
+    }
+    
+    public void display(){
+        System.out.printf("temperature is %.1f , humidity is %.1f%%, pressure is %d\n", temperature, humidity, pressure);
+    }
+}

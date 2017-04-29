@@ -1,0 +1,178 @@
+package study;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+public class Study {
+    
+    public static void main(String [] args) {
+        Customer A = new Customer("customerA");
+        A.addOrder(new Order("order1","item1"));
+        Order o1 = new Order("order2", "item2");
+        o1.addItem(new Item("item3"), new Item("item4"));
+        A.addOrder(o1);
+        
+        Customer B = new Customer("customerB");
+        B.addOrder(new Order("order3", "item5"));
+        B.addOrder(new Order("order4", "item6"));
+        B.addOrder(new Order("order5", "item7"));
+        
+        CustomerGroup cg = new CustomerGroup();
+        cg.addCustomer(A, B);
+        
+        GeneralReport gr = new GeneralReport();
+        cg.accept(gr);
+        
+        gr.display();
+    }
+    
+}
+
+
+
+interface Visitable {
+    
+    void accept(Visitor visitor);
+    
+}
+
+
+
+interface Visitor {
+    
+    void visit(Customer customer);
+    void visit(Order order);
+    void visit(Item item);
+    
+}
+
+
+
+class Item implements Visitable {
+
+    private final String name;
+    
+    public Item(String name) {
+        this.name = name;
+    }
+            
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+}
+
+
+
+class Order implements Visitable {
+    
+    private static int id = 0000;
+    private final int instanceID;
+    private final String name;
+    private final List<Item> itemsList;
+    
+    public Order(String name, String itemName){
+        this.name = name;
+        instanceID = ++id;
+        itemsList  = new ArrayList<>();
+        addItem(new Item(itemName));
+    }
+    
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        itemsList.stream().forEach(item -> item.accept(visitor));
+    }
+    
+    public void addItem(Item...item) {
+        itemsList.addAll(Arrays.asList(item));
+    }
+    
+    public String getAttributes() {
+        return "name is: ".concat(name).concat(", id is: ")
+                .concat(Integer.toString(instanceID));
+    }
+    
+}
+
+
+
+class Customer implements Visitable {
+
+    private final String name;
+    private final List<Order> ordersList = new ArrayList<>();
+    
+    public Customer(String name) {
+        this.name = name;
+    }
+    
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        ordersList.stream().forEach( order -> order.accept(visitor));
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void addOrder(Order...order) {
+        ordersList.addAll(Arrays.asList(order));
+    }
+    
+}
+
+
+
+class CustomerGroup implements Visitable {
+
+    private final List<Customer> customersList = new ArrayList<>();
+    
+    @Override
+    public void accept(Visitor visitor) {
+        customersList.stream().forEach( customer -> customer.accept(visitor));
+    }
+    
+    public void addCustomer(Customer...customer) {
+        customersList.addAll(Arrays.asList(customer));
+    }
+    
+}
+
+
+
+class GeneralReport implements Visitor {
+
+    private int customers = 0, orders = 0, items = 0;
+    
+    
+    @Override
+    public void visit(Customer customer) {
+        customers++;
+    }
+
+    @Override
+    public void visit(Order order) {
+        orders++;
+    }
+
+    @Override
+    public void visit(Item item) {
+        items++;
+    }
+    
+    public void display() {
+        System.out.println("customers: ".concat(Integer.toString(customers)
+                .concat("\norders: ").concat(Integer.toString(orders))
+                .concat("\nitems: ".concat(Integer.toString(items)))));
+    }
+    
+}

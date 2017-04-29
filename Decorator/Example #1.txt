@@ -1,0 +1,123 @@
+package test;
+
+
+public class Test {
+
+    public static void main(String[] args) {
+        Coffee sampleCoffee = new SimpleCoffee();
+        System.out.println("Cost: " + sampleCoffee.getCost() + " Ingredient: "
+                + sampleCoffee.getIngredient());
+
+        sampleCoffee = new Sprinkles(sampleCoffee);
+        System.out.println("Cost: " + sampleCoffee.getCost() + " Ingredient: "
+                + sampleCoffee.getIngredient());
+
+        sampleCoffee = new Milk(sampleCoffee);
+        System.out.println("Cost: " + sampleCoffee.getCost() + " Ingredient: "
+                + sampleCoffee.getIngredient());
+    }
+
+}
+
+
+
+interface Coffee {
+
+    public double getCost(); // returns the cost of coffee
+    public String getIngredient(); // returns the ingredients mixed with coffee
+
+}
+
+
+
+class SimpleCoffee implements Coffee {
+
+    private double cost;
+    private String ingredient;
+
+    public SimpleCoffee() {
+        cost = 1;
+        ingredient = "Coffee";
+    }
+
+    @Override
+    public double getCost() {
+        return cost;
+    }
+
+    @Override
+    public String getIngredient() {
+        return ingredient;
+    }
+
+}
+
+
+
+abstract class CoffeeDecorator implements Coffee {
+
+    protected Coffee decoratedCoffee;
+    protected String ingredientSeparator;
+
+    public CoffeeDecorator(Coffee decoratedCoffee) {
+        this.decoratedCoffee = decoratedCoffee;
+        ingredientSeparator = ", ";
+    }
+
+    @Override
+    public double getCost() {
+        return decoratedCoffee.getCost();
+    }
+
+    @Override
+    public String getIngredient() {
+        return decoratedCoffee.getIngredient();
+    }
+
+}
+
+
+
+class Milk extends CoffeeDecorator {
+
+    private double cost;
+    private String ingredient;
+
+    public Milk(Coffee decoratedCoffee) {
+        super(decoratedCoffee);
+        cost = 0.5;
+        ingredient = "Milk";
+    }
+
+    public double getCost() {
+        return super.getCost() + cost;
+    }
+
+    public String getIngredient() {
+        return super.getIngredient() + super.ingredientSeparator + ingredient;
+    }
+
+}
+
+
+
+class Sprinkles extends CoffeeDecorator {
+
+    private double cost;
+    private String ingredient;
+
+    public Sprinkles(Coffee decoratedCoffee) {
+        super(decoratedCoffee);
+        cost = 0.2;
+        ingredient = "Sprinkles";
+    }
+
+    public double getCost() {
+        return super.getCost() + cost;
+    }
+
+    public String getIngredient() {
+        return super.getIngredient() + super.ingredientSeparator + ingredient;
+    }
+
+}

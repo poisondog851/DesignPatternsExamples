@@ -1,0 +1,114 @@
+package factorypattern;
+
+public class FactoryPattern{
+    public static void main(String[] args){
+        System.out.println("First way:");
+        runTest1("win");
+        runTest1("linux");
+        runTest1("mac");
+        System.out.println("------------------------");
+        System.out.println("Second way:");
+        runTest2("win");
+        runTest2("linux");
+        runTest2("mac");
+        System.out.println("------------------------");
+        System.out.println("Third way:");
+        runTest3(null);
+        runTest3("something");
+        System.out.println("------------------------");
+        
+    }
+    
+    static void runTest1(String message){
+        String  currentOS = message;
+        Factory factory = new Factory();
+        System.out.println("OS ID:"+currentOS);
+        Client client = factory.getClient(currentOS);
+        ////Всё, что ниже, свободно от конкретной реализации клиента
+        if(client != null) System.out.println("Client created for OS:"+client.getTargetOS());
+        else System.out.println("No client!");
+    }
+    
+    static void runTest2(String message){
+        String  currentOS = message;
+        Factory2 factory2 = new Factory2();
+        System.out.println("OS ID:"+currentOS);
+        Client client = null;
+        if (message.equalsIgnoreCase("win")){
+            client = factory2.getWinClient();
+            System.out.println("Client created for OS:Windows Vista");
+        }
+        else if(message.equalsIgnoreCase("linux")){
+            client = factory2.getLinuxClient();
+            System.out.println("Client created for OS:Windows Vista");            
+        }
+        else System.out.println("Wrong OS id provided");
+    }
+    
+    static void runTest3(String msg){
+        Factory3 factory3;
+        if(msg != null)
+            factory3 = new Factory3(msg);
+        else
+            factory3 = new Factory3();
+        factory3.runClient();
+    }
+}
+
+interface Client{
+    public String getTargetOS();
+}
+
+class ClientLinuxImpl implements Client{
+    @Override
+    public String getTargetOS(){
+        return "Gentoo Linux";
+    }
+}
+
+class ClientWinImpl implements Client{
+    @Override
+    public String getTargetOS(){
+        return "Windows Vista";
+    }
+}
+
+class Factory{
+    public Client getClient(String currentOS){
+        if(currentOS.equalsIgnoreCase("win")) return new ClientWinImpl();
+        if(currentOS.equalsIgnoreCase("linux")) return new ClientLinuxImpl();
+        return null;
+    }
+}
+
+class Factory2{
+    public Client getWinClient(){
+        return new ClientWinImpl();
+    }
+    public Client getLinuxClient(){
+        return new ClientLinuxImpl();
+    }
+}
+
+//inner client class
+class Factory3{
+    private Client innerClient;
+    
+    public Factory3(){
+        System.out.println("initialize factory w/o args");
+        innerClient = new ClientLinuxImpl();
+    }
+
+    public Factory3(String arg){
+        System.out.println("initialize factory with args: "+arg);
+        innerClient = new ClientWinImpl();
+    }
+
+    public void runClient(){
+        if(innerClient != null){
+            System.out.println("Inner client created for OS:  "+innerClient.getTargetOS());
+        }else 
+            System.out.println("inner client not initialized yet");
+    }
+}
+

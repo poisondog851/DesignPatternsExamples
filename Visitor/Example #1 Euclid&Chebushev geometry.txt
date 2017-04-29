@@ -1,0 +1,163 @@
+package study;
+
+
+public class Study {
+
+    public static void main(String[] args) {
+        Point p = new Point2D(1, 2);
+        Visitor v = new Chebushev();
+        p.accept(v);
+        System.out.println(p.getMetric());
+        
+        v = new Euclid();
+        p.accept(v);
+        System.out.println(p.getMetric());
+        
+        p = new Point3D(1, 2, 3);
+        v = new Chebushev();
+        p.accept(v);
+        System.out.println(p.getMetric());
+        
+        v = new Euclid();
+        p.accept(v);
+        System.out.println(p.getMetric());
+    }
+    
+}
+
+
+
+interface Visitable {
+    
+    void accept(Visitor visitor);/*{
+        visitor.visit(this);
+    }*/
+    
+}
+
+
+
+interface Visitor {
+    
+    void visit(Point2D pd);
+    void visit(Point3D pd);
+    
+}
+
+
+
+abstract class Point implements Visitable{
+    
+    private double metric = -1;
+    
+    public double getMetric() {
+        return metric;
+    }
+    
+    public boolean setMetric(double metric) {
+        try{
+            this.metric = metric;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+}
+
+
+
+class Point2D extends Point {
+    
+    private final double x, y;
+    
+    public Point2D(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public double getX() {
+        return x;
+    }
+    
+    public double getY() {
+        return y;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+    
+}
+
+
+class Point3D extends Point {
+    
+    private final double x, y, z;
+    
+    public Point3D(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    public double getX() {
+        return x;
+    }
+    
+    public double getY() {
+        return y;
+    }
+    
+    public double getZ() {
+        return z;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+    
+}
+
+
+
+class Euclid implements Visitor {
+
+    @Override
+    public void visit(Point2D pd) {
+        pd.setMetric(Math.sqrt(pd.getX() * pd.getY() + pd.getY() * pd.getX()));
+    }
+
+    @Override
+    public void visit(Point3D pd) {
+        pd.setMetric(Math.sqrt(pd.getX() * pd.getY() + pd.getY() * pd.getX()
+        + pd.getZ() * pd.getZ()));
+    }
+
+}
+
+
+
+class Chebushev implements Visitor {
+
+    @Override
+    public void visit(Point2D pd) {
+        double ax = Math.abs(pd.getX());
+        double ay = Math.abs(pd.getY());
+        pd.setMetric(ax>ay ? ax : ay);
+    }
+
+    @Override
+    public void visit(Point3D pd) {
+        double ax = Math.abs(pd.getX());
+        double ay = Math.abs(pd.getY());
+        double az = Math.abs(pd.getZ());
+        double max = ax > ay ? ax : ay;
+        if (max < az) max = az;
+        pd.setMetric(max);
+    }
+
+}

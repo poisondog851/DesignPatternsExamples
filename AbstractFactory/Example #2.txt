@@ -1,0 +1,117 @@
+package test;
+
+public class Test{
+    public static void main(String[] args){
+        Client client = new Client();
+        client.setGreenFigureFactory();
+        client.setBlueFigureFactory();
+        client.setRedFigureFactory();
+    }
+}
+
+abstract class Square{
+    public Square(){
+        System.out.println("Created "+this.getClass().getSimpleName());
+    }
+}
+
+abstract class Circle{
+    public Circle(){
+        System.out.println("Created "+this.getClass().getSimpleName());
+    }
+}
+
+abstract class Triangle{
+    public Triangle(){
+        System.out.println("Created "+this.getClass().getSimpleName());
+    }
+}
+
+class RedSquare extends Square {}
+class RedCircle extends Circle {}
+class RedTriangle extends Triangle {}
+
+class GreenSquare extends Square {}
+class GreenCircle extends Circle {}
+class GreenTriangle extends Triangle {}
+
+class BlueSquare extends Square {}
+class BlueCircle extends Circle {}
+class BlueTriangle extends Triangle {}
+
+abstract class FigureFactory{
+    public abstract Square createSquare();
+    public abstract Triangle createTriangle();
+    public abstract Circle createCircle();
+}
+
+class RedFigureFactory extends FigureFactory{
+    @Override
+    public Square createSquare() {
+        return new RedSquare();
+    }
+    @Override
+    public Triangle createTriangle() {
+        return new RedTriangle();
+    }
+    @Override
+    public Circle createCircle() {
+        return new RedCircle();
+    }
+}
+
+class BlueFigureFactory extends FigureFactory{
+    @Override
+    public Square createSquare() {
+        return new BlueSquare();
+    }
+    @Override
+    public Triangle createTriangle() {
+        return new BlueTriangle();
+    }
+    @Override
+    public Circle createCircle() {
+        return new BlueCircle();
+    }
+}
+
+class GreenFigureFactory extends FigureFactory{
+    @Override
+    public Square createSquare() {
+        return new GreenSquare();
+    }
+    @Override
+    public Triangle createTriangle() {
+        return new GreenTriangle();
+    }
+    @Override
+    public Circle createCircle() {
+        return new GreenCircle();
+    }
+}
+
+class Client{
+    private FigureFactory ff = null;
+    
+    public void setRedFigureFactory(){
+        ff = new RedFigureFactory();
+        run();
+    }
+    
+    public void setGreenFigureFactory(){
+        ff = new GreenFigureFactory();
+        run();
+    }
+    
+    public void setBlueFigureFactory(){
+        ff = new BlueFigureFactory();
+        run();
+    }
+    public void run(){
+        //code below is free 
+        Square Square = ff.createSquare();
+        Circle circle = ff.createCircle();
+        Triangle triangle = ff.createTriangle();
+    }
+}
+

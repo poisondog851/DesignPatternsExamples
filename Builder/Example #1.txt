@@ -1,0 +1,120 @@
+package test;
+
+public class Test{
+    public static void main(String [] args){
+        Director director = new Director(new ConcreteBuilderA());
+        director.constructProduct();
+        Product product = director.getProduct();
+        System.out.println(product);
+        
+        director = new Director(new ConcreteBuilderB());
+        director.constructProduct();
+        product = director.getProduct();
+        System.out.println(product);
+    }
+}
+
+class Product{
+    private boolean someBoolean ;
+    private String string = null;
+    private int integer = 0;
+    
+    public void setSomeBoolean(boolean someBoolean){
+        this.someBoolean = someBoolean;
+    }
+    
+    public void setString(String string){
+        this.string = string;
+    }
+    
+    public void setInteger(int integer){
+        this.integer = integer; 
+    }
+    
+    @Override
+    public String toString(){
+        return "Created " + this.getClass().getSimpleName();
+    }
+}
+
+class ConcreteProductA extends Product{}
+
+class ConcreteProductB extends Product{}
+
+abstract class Builder{
+    protected Product product;
+    
+    public Product getProduct(){
+        return this.product;
+    }
+    
+    public abstract void createNewProduct();
+    public abstract void buildSomeBoolean();
+    public abstract void buildString();
+    public abstract void buildInteger();
+}
+
+class ConcreteBuilderA extends Builder{
+
+    @Override
+    public void createNewProduct() {
+        product = new ConcreteProductA();
+    }
+
+    @Override
+    public void buildSomeBoolean() {
+        product.setSomeBoolean(true);
+    }
+
+    @Override
+    public void buildString() {
+        product.setString("A");
+    }
+
+    @Override
+    public void buildInteger() {
+        product.setInteger(1);
+    }
+}
+
+class ConcreteBuilderB extends Builder{
+
+    @Override
+    public void createNewProduct() {
+        product = new ConcreteProductB();
+    }
+
+    @Override
+    public void buildSomeBoolean() {
+        product.setSomeBoolean(false);
+    }
+
+    @Override
+    public void buildString() {
+        product.setString("B");
+    }
+
+    @Override
+    public void buildInteger() {
+        product.setInteger(-1);
+    }
+}
+
+class Director{
+    private Builder builder;
+    
+    public Director(Builder builder){
+        this.builder = builder; 
+    }
+    
+    public Product getProduct(){
+        return builder.getProduct();
+    }
+    
+    public void constructProduct(){
+        builder.createNewProduct();
+        builder.buildInteger();
+        builder.buildSomeBoolean();
+        builder.buildString();
+    }
+}

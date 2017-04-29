@@ -1,0 +1,109 @@
+package factorypattern;
+
+class FactoryPattern{
+    public static void main(String [] args){
+        Computer server = ComputerFactory.createComputer("server", "500 GB", "6 GB", "2.4 GHZ");
+        Computer notebook = DefaultComputerFactory.createComputer();
+        Computer server1 = new ServerFactory().createComputer("750 GB", "2 GB", "1.9 GHZ");
+        Computer notebook1 = new NotebookFactory().createComputer("1 TB", "4 GB", "4.2 GHZ");
+        System.out.println(""+server+notebook+server1+notebook1);
+    }
+}
+
+abstract class Computer{
+    public abstract String getHDD();
+    public abstract String getRAM();
+    public abstract String getCPU();
+    
+    @Override
+    public String toString(){
+        return "HDD:"+getHDD()+", CPU:"+getCPU()+", RAM:"+getRAM()+"\n";
+    }
+}
+
+class Notebook  extends Computer{
+
+    private final String hdd;
+    private final String cpu;
+    private final String ram;
+    
+    public Notebook(String hdd,String cpu,String ram){
+        this.hdd = hdd;
+        this.cpu = cpu;
+        this.ram = ram;
+        
+    }
+    @Override
+    public String getHDD() {
+        return hdd;
+    }
+
+    @Override
+    public String getRAM() {
+        return ram;
+    }
+
+    @Override
+    public String getCPU() {
+        return cpu;
+    }
+}
+
+class Server  extends Computer{
+
+    private final String hdd;
+    private final String cpu;
+    private final String ram;
+    
+    public Server(String hdd,String cpu,String ram){
+        this.hdd = hdd;
+        this.cpu = cpu;
+        this.ram = ram;
+        
+    }
+    @Override
+    public String getHDD() {
+        return hdd;
+    }
+
+    @Override
+    public String getRAM() {
+        return ram;
+    }
+
+    @Override
+    public String getCPU() {
+        return cpu;
+    }
+}
+
+
+class ComputerFactory{
+    public static Computer createComputer(String type,String hdd, String ram, String cpu){
+        if(type.equalsIgnoreCase("notebook")) return new Notebook(hdd,ram,cpu);
+        if(type.equalsIgnoreCase("server")) return new Server(hdd,ram,cpu);
+        return null;
+    }
+}
+
+class DefaultComputerFactory{
+    public static Computer createComputer(){
+        return new Notebook("800 GB", "2 GB", "3.1 GHZ");
+    }
+}
+
+abstract class AbstractComputerFactory{
+    public abstract Computer createComputer(String hdd, String ram, String cpu);
+}
+class NotebookFactory extends AbstractComputerFactory{
+    @Override
+    public Computer createComputer(String hdd, String ram, String cpu){
+        return new Notebook(hdd,ram,cpu); 
+    }
+}
+class ServerFactory extends AbstractComputerFactory{
+    @Override
+    public Computer createComputer(String hdd, String ram, String cpu){
+        return new Server(hdd,ram,cpu); 
+    }
+}

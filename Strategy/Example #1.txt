@@ -1,0 +1,80 @@
+package study;
+
+
+public class Study {
+
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.count(new Addition(), 5, 6);
+        client.count(new Subtraction(), 11, 80);
+        client.count(new Multiplication(), 2, 11);
+        client.count(new Division(), 5, 0);
+    }
+    
+}
+
+
+interface Strategy {
+    
+    double make(double x, double y);
+    
+}
+
+
+
+class Addition implements Strategy {
+
+    @Override
+    public double make(double x, double y) {
+        return x + y;
+    }
+    
+}
+
+
+
+class Subtraction implements Strategy {
+
+    @Override
+    public double make(double x, double y) {
+        return x - y;
+    }
+    
+}
+
+
+
+class Multiplication implements Strategy {
+
+    @Override
+    public double make(double x, double y) {
+        return x * y;
+    }
+    
+}
+
+
+
+class Division implements Strategy {
+
+    @Override
+    public double make(double x, double y) {
+        if(y != 0) return x / y;
+        else return Double.NaN;
+    }
+    
+}
+
+
+
+class Client {
+    
+    private Strategy strategy;
+    
+    public void count(Strategy strategy, double x, double y) {
+        this.strategy = strategy;
+        double result = strategy.make(x, y);
+        System.out.println(result);
+    }
+    
+}

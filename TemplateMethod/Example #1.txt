@@ -1,0 +1,54 @@
+package study;
+
+
+class Study {
+    
+    public static void main(String[] args) {
+        ConcreteClassA classA = new ConcreteClassA();
+        classA.templateMethod();
+    }
+    
+}
+
+
+
+abstract class AbstractClass {
+    
+    
+    public final void templateMethod() {
+        doFirst();
+        doSecond();
+        doThird();
+        doFourth();
+    }
+    
+    public final void doFirst(){
+        System.out.println("make first action");
+    }
+    
+    protected abstract void doSecond();
+    protected abstract void doThird();
+    protected abstract void doFourth();
+    
+}
+
+
+
+class ConcreteClassA extends AbstractClass {
+
+    @Override
+    protected void doSecond() {
+       System.out.println("make second action");
+    }
+
+    @Override
+    protected void doThird() {
+        System.out.println("make third action");
+    }
+
+    @Override
+    protected void doFourth() {
+        System.out.println("make fourth action");
+    }
+    
+}

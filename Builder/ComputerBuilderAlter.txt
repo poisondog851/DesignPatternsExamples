@@ -1,0 +1,93 @@
+package test;
+
+
+public class Test {
+    
+    public static void main (String [] args) {
+        Computer comp = new Computer.
+                ComputerBuilder("Everest", "MiddlePower", "mouse + keyboard")
+                .setUSBPortCount(4)
+                .setWiFiEnabled(true)
+                .build();
+        System.out.println(comp);
+    }
+    
+}
+
+
+class Computer {
+    
+    private String display, systemBlock, manipulators;
+    private int USBPortCount;
+    private boolean isWiFiEnabled;
+    
+    public Computer(ComputerBuilder builder) {
+        this.display = builder.display;
+        this.manipulators = builder.manipulators;
+        this.systemBlock = builder.systemBlock;
+        this.USBPortCount = builder.USBPortCount;
+        this.isWiFiEnabled = builder.isWiFiEnabled;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+    
+    public String getSystemBlock() {
+        return systemBlock;
+    }
+    
+    public String getManipulators() {
+        return manipulators;
+    }
+    
+    public int getUSBPortCount() {
+        return USBPortCount;
+    }
+    
+    public String getWiFIEnabled() {
+        if(isWiFiEnabled) return "Enable";
+        else return "Disable";
+    }
+    
+    @Override
+    public String toString(){
+        return "Display: "+(display==null?"No":display)
+                +"\nSytem block: "+(systemBlock==null?"No":systemBlock)
+                +"\nManipulators: "+(systemBlock==null?"No":manipulators);
+    }
+    
+    static class ComputerBuilder  {
+        
+        private final String display, systemBlock, manipulators;
+        private int USBPortCount;
+        private boolean isWiFiEnabled;
+        
+        public ComputerBuilder(String display, String systemBlock, String manipulators) {
+            this.display = display;
+            this.systemBlock = systemBlock;
+            this.manipulators = manipulators;
+        }
+        
+        public ComputerBuilder setUSBPortCount(int count) {
+            USBPortCount = count;
+            return this;
+        }
+    
+        public ComputerBuilder setWiFiEnabled(boolean bool) {
+            isWiFiEnabled = bool;
+            return this;
+        }
+        
+        public Computer build() {
+            return new Computer (this);
+        }
+        
+    }
+        
+}
+    
+
+
+
+

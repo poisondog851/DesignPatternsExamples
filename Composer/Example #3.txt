@@ -1,0 +1,73 @@
+package test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+
+public class Test {
+    
+    public static void main (String [] args) {
+        Leaf leaf1 = new Leaf();
+        Leaf leaf2 = new Leaf();
+        Leaf leaf3 = new Leaf();
+        Leaf leaf4 = new Leaf();
+        
+        Composite composite1 = new Composite();
+        Composite composite2 = new Composite();
+        Composite composite3 = new Composite();
+        
+        composite1.add(leaf1,leaf2);
+        composite2.add(leaf3,leaf4);
+        composite3.add(composite1, composite2);
+        
+        composite3.log();
+    }
+
+}
+
+
+
+interface Addable {
+    
+    public void add(Addable...wrappable);
+    public void remove(Addable wrappable);
+    public void log();
+    
+}
+
+
+
+class Composite implements Addable {
+
+    private ArrayList<Addable> childs = new ArrayList<>();
+    
+    @Override
+    public void add(Addable...wrappable) {
+        childs.addAll(Arrays.asList(wrappable));
+        System.out.println(wrappable.getClass().getTypeName()+ "added to " + this.getClass().getTypeName());
+    }
+
+    @Override
+    public void remove(Addable wrappable) {
+        childs.remove(wrappable);
+    }
+
+    @Override
+    public void log() {
+        for (Addable w :childs){
+            w.log();
+        }
+    }
+    
+}
+
+
+
+class Leaf extends Composite {
+    
+    @Override
+    public void log() {
+        System.out.println("Hi! My name is "+this.getClass().getTypeName());
+    }
+    
+}

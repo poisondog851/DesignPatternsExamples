@@ -1,0 +1,193 @@
+package test;
+
+import java.util.Objects;
+
+
+public class Test {
+    
+    public static void main (String [] args) {
+        Client client = new Client();
+        client.createFactory("RU");
+        client.run();
+        client.createFactory("JP");
+        client.run();
+        client.createFactory("US");
+        client.run();
+    }
+}
+
+
+
+interface Locale {
+    
+    public String getLocaleCountry();
+    
+}
+
+
+
+interface Images {
+    
+    public String getImagesCountry();
+    
+}
+
+
+
+interface Help {
+    
+    public String getHelpCountry();
+    
+}
+
+
+
+class JapaneseLocalImpl implements Locale {
+
+    @Override
+    public String getLocaleCountry() {
+        return "Japan";
+    }
+}
+
+
+
+class JapaneseHelpImpl implements Help {
+
+    @Override
+    public String getHelpCountry() {
+        return "Japan";
+    }
+    
+}
+
+
+
+class JapaneseImagesImpl implements Images {
+
+    @Override
+    public String getImagesCountry() {
+        return "Japan";
+    }
+    
+}
+
+
+
+class USLocalImpl implements Locale {
+
+    @Override
+    public String getLocaleCountry() {
+        return "US";
+    }
+}
+
+
+
+class USHelpImpl implements Help {
+
+    @Override
+    public String getHelpCountry() {
+        return "US";
+    }
+    
+}
+
+
+
+class USImagesImpl implements Images {
+
+    @Override
+    public String getImagesCountry() {
+        return "US";
+    }
+    
+}
+
+
+
+interface UIFactory {
+    
+    public Help createHelp();
+    public Images createImages();
+    public Locale createLocale();
+    
+}
+
+
+
+class JapaneseUIFactory implements UIFactory {
+
+    @Override
+    public Help createHelp() {
+        return new JapaneseHelpImpl();
+    }
+
+    @Override
+    public Images createImages() {
+        return new JapaneseImagesImpl();
+    }
+
+    @Override
+    public Locale createLocale() {
+        return new JapaneseLocalImpl();
+    }
+        
+}
+
+
+
+class USUIFactory implements UIFactory {
+
+    @Override
+    public Help createHelp() {
+        return new USHelpImpl();
+    }
+
+    @Override
+    public Images createImages() {
+        return new USImagesImpl();
+    }
+
+    @Override
+    public Locale createLocale() {
+        return new USLocalImpl();
+    }
+    
+}
+
+
+
+class Client {
+    
+    private Help help;
+    private Locale locale;
+    private Images images;
+    private UIFactory uifactory;
+
+    public void createFactory(String ID) {
+        if(ID.equals("US")) {
+            this.uifactory = new USUIFactory();
+        }
+        else if(ID.equals("JP")) {
+            this.uifactory = new JapaneseUIFactory();
+        }
+        else {
+            System.out.println("Wrong ID: " + ID);
+        }
+    }
+    
+    public void run() {
+        if(uifactory != null) {
+            help = uifactory.createHelp();
+            images = uifactory.createImages();
+            locale = uifactory.createLocale();
+            System.out.println("Was created: " + help.getClass().getSimpleName() + ", " +
+                    images.getClass().getSimpleName() + ", " + locale.getClass().getSimpleName());
+        }
+        else {
+            System.out.println("Can't create products - uifactory wasn't created");
+        }
+    }
+
+}

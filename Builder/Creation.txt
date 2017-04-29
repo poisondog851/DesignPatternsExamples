@@ -1,0 +1,54 @@
+package test;
+
+public class Test{
+    public static void main(String[]args){
+        Creature horse = new Creature().setAbilityToFly().setAbilityToSwim().setAbilityToWalk();
+        horse.log();
+    }
+}
+
+class Creature{
+    //required params
+    private boolean canWalk;
+    private boolean canFly;
+    private boolean canSwim;
+    String description = "No description";
+    
+    public Creature setAbilityToWalk(){
+        canWalk = true;
+        if(description.equals("No description")){ 
+            description = "Creation can walk";
+        }else{
+            description = description.concat(" and can walk");
+        }
+        return this;
+    }
+    
+    public Creature setAbilityToFly(){
+        canFly  = true;
+        if(description.equals("No description")){ 
+            description = "Creation can fly";
+        }else{
+            description = description.concat(" and can fly");
+        }
+        return this;
+    }
+    
+    public Creature setAbilityToSwim(){
+        canSwim = true;
+        if(description.equals("No description")){ 
+            description = "Creation can swim";
+        }else{
+            description = description.concat(" and can swim");
+        }
+        return this;
+    }
+    
+    void log(){
+        System.out.println(description);
+        System.out.println("Can creation walk? " + this.canWalk
+        +"\nCan creatioon fly? " + this.canFly
+        +"\nCan creation swim? " + this.canSwim);
+    }
+}
+

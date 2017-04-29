@@ -1,0 +1,99 @@
+package test;
+
+import java.util.HashMap;
+
+public class Test{
+    
+    public static void main(String [] args){
+        FlyweightFactory factory = new FlyweightFactory();
+        
+        int[] characterCode = {1,2,3};
+        for(int nextCode : characterCode){
+            EnglishCharacter character = factory.getCharacter(nextCode);
+            character.printCharacter();
+        }
+    }
+    
+}
+
+
+
+abstract class EnglishCharacter{
+        
+        protected char symbol;
+        protected int width;
+        protected int height;
+        public void printCharacter(){
+            System.out.println("Symbol = " + symbol + " Width = " + width + " Height = " + height);
+        }
+        
+}
+
+
+
+class CharacterA extends EnglishCharacter{
+
+    public CharacterA(){
+        symbol = 'A';
+        width = 10;
+        height = 20;
+    }
+    
+}
+
+
+
+class CharacterB extends EnglishCharacter{
+
+    public CharacterB(){
+        symbol = 'B';
+        width = 20;
+        height = 30;
+    }
+    
+}
+
+
+
+class CharacterC extends EnglishCharacter{
+
+    public CharacterC(){
+        symbol = 'C';
+        width = 40;
+        height = 50;
+    }
+    
+}
+
+
+
+class FlyweightFactory{
+    
+    private HashMap<Integer, EnglishCharacter> characters = new HashMap<>();
+    
+    public EnglishCharacter getCharacter(int characterCode){
+        EnglishCharacter character = characters.get(characterCode);
+        if(character == null){
+            switch (characterCode){
+                case 1 : {
+                    character = new CharacterA();
+                    break;
+                }
+                case 2 : {
+                    character = new CharacterB();
+                    break;
+                }
+                case 3 : {
+                    character = new CharacterC();
+                    break;
+                }
+            }
+            characters.put(characterCode, character);
+        }
+        return character;
+    }
+    
+}
+
+
+

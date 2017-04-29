@@ -1,0 +1,65 @@
+package test;
+
+
+public class Test{
+    
+    public static void main(String[]args){
+        Computer computer = new Computer();
+        computer.startComputer();
+    }
+    
+}
+
+
+
+/* Complex parts */
+class CPU {
+    
+    public void freeze() { System.out.println("CPU freezed"); }
+    public void jump(long position) { System.out.println("CPU jumped at " + position ); }
+    public void execute () { System.out.println("CPU executed"); }
+    
+}
+
+
+
+class Memory {
+    
+    public void  load(long position, byte [] data) { System.out.println("Memory loaded"); }
+    
+}
+
+
+
+class HardDrive {
+    
+    public byte[] read(long lba, int size) { return new byte[0]; }
+    
+}
+
+
+
+/* Facade */
+class Computer {
+    
+    private final CPU cpu;
+    private final Memory memory;
+    private final HardDrive hardDrive;
+    
+    private final int BOOT_ADDRESS = (int) (Math.random() * 1000000 + 100) ;
+    private final int SECTOR_SIZE = BOOT_ADDRESS; 
+    private final int BOOT_SECTOR = BOOT_ADDRESS; 
+    public Computer() { 
+        this.cpu = new CPU();
+        this.memory = new Memory();
+        this.hardDrive =  new HardDrive();
+    }
+    
+    public void startComputer(){
+        cpu.freeze();
+        memory.load(BOOT_ADDRESS, hardDrive.read(BOOT_SECTOR, SECTOR_SIZE));
+        cpu.jump(BOOT_ADDRESS);
+        cpu.execute();
+    }
+    
+}

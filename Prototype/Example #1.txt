@@ -1,0 +1,77 @@
+package test;
+
+import java.util.ArrayList;
+
+public class Test{
+    public static void main(String [] args){
+        CloneMachine.initPrototype();
+        CloneMachine.startCloning(1000000);
+    }
+}
+
+class Prototype implements Cloneable{
+    String bigString = "String";
+    
+    public Prototype(){
+        //just a example of long process
+        long start = System.currentTimeMillis();
+        int k = 0;
+        for(int i = 0; i < 100000000; i++){
+            if(k == 0){
+                bigString = bigString.concat("0");
+                k = 1;
+            }else{
+                bigString = bigString.substring(0, bigString.length()-1);
+                k = 0;
+            }
+        }
+        System.out.println("new prototype instance created. Time required: " + 
+                (System.currentTimeMillis() - start)*0.001 + " second");
+    }
+    
+    public void log(){
+        System.out.println("I am a instance of prototype");
+    }
+    
+    @Override
+    public Prototype clone() {
+        try{
+            return (Prototype)super.clone();
+        }catch (CloneNotSupportedException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+class CloneMachine{
+    private static Prototype proto;
+    static ArrayList<Prototype> bunchOfClones;
+    
+    public static void initPrototype(){
+        proto = new Prototype();
+    }
+    
+    public static  void startCloning(int quantity){
+        long [] time = new long [quantity];
+        bunchOfClones = new ArrayList<>();
+        long start;
+        for(int i = 0; i < quantity; i++){
+            start = System.currentTimeMillis();
+            bunchOfClones.add(proto.clone());
+            time[i] = System.currentTimeMillis() - start;
+        }
+        long total = 0;
+        for(Long each : time){
+            total +=  each;
+        }
+        
+        System.out.println("A cloning operation was finished. "
+                + "\nWas cloned: " + bunchOfClones.size() 
+                + "\nIt took total time: " + total
+                + "\nAverage cloning time: " + 
+                + Double.parseDouble(Long.toString(total)) / bunchOfClones.size());  
+    }
+}
+    
+    

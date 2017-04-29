@@ -1,0 +1,104 @@
+package test;
+
+public class Test{
+    public static void main(String [] args){
+    //#1
+    System.out.println("Way #1");
+    ParentProduct a1 = Factory.create("A");
+    ParentProduct b1 = Factory.create("B");
+    ParentProduct c1 = Factory.create("C");
+    
+    //#2
+    System.out.println("Way #2");
+    ConcreteProductA a2 = Factory2.createProductA();
+    ConcreteProductB b2 = Factory2.createProductB();
+    
+    //#3
+    System.out.println("Way #3");
+    ParentProduct a3 = new ConcreteFactoryA().create();
+    ParentProduct b3 = new ConcreteFactoryA().create();
+    
+    //#4
+    System.out.println("Way #3");
+    ParentProduct a4 = new DefaultParentFactory().create();
+    ParentProduct b4 = new ConcreteFactoryB1().create();
+    }
+}
+  
+class ParentProduct {
+    @Override
+    public String toString(){
+        return this.getClass().getSimpleName()+ " created";
+    }
+}
+
+class ConcreteProductA extends ParentProduct{
+    public ConcreteProductA() {
+        System.out.println(this);
+    }
+}
+
+class ConcreteProductB extends ParentProduct{
+    public ConcreteProductB() {
+        System.out.println(this);
+    };
+}
+
+//Way #1
+class Factory{
+    public static ParentProduct create(String ProductID){
+        if(ProductID.equalsIgnoreCase("A")) return new ConcreteProductA();
+        if(ProductID.equalsIgnoreCase("B")) return new ConcreteProductB();
+        System.out.println("Wrong ProductID");
+        return null;
+    }
+}
+//Way #2
+class Factory2{
+    public static ConcreteProductA createProductA(){
+        return new ConcreteProductA();
+    }
+    
+    public static ConcreteProductB createProductB(){
+        return new ConcreteProductB();
+    }
+}
+//Way #3
+abstract class ParentFactory{
+    public abstract ParentProduct create();
+}
+
+class ConcreteFactoryA extends ParentFactory{
+    @Override
+    public ParentProduct create() {
+        return new ConcreteProductA();
+    }
+}
+
+class ConcreteFactoryB extends ParentFactory{
+    @Override
+    public ParentProduct create() {
+        return new ConcreteProductA();
+    }
+}
+//Way #4 with default implementation
+class DefaultParentFactory{
+    public ParentProduct create(){
+        return new ConcreteProductA();
+    }
+}
+
+class ConcreteFactoryA1 extends DefaultParentFactory{
+    @Override
+    public ParentProduct create() {
+        return super.create();
+    }
+}
+
+class ConcreteFactoryB1 extends ParentFactory{
+    @Override
+    public ParentProduct create() {
+        return new ConcreteProductB();
+    }
+}
+

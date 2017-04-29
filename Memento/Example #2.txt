@@ -1,0 +1,51 @@
+package test;
+
+public class Test{
+    public static void main(String[]args){
+        Originator originator = new Originator();
+        
+        originator.setState("one");
+        System.out.printf("Originator has state %s\n", originator.getState());
+        originator.saveState();
+        
+        originator.setState("two");
+        System.out.printf("Originator has state %s\n", originator.getState());
+        
+        originator.restoreState();
+        System.out.printf("Originator's state  after restoring is %s\n", originator.getState());
+    }
+}
+
+class Originator{
+    private String state;
+    
+    public void setState(String state){
+        this.state = state; 
+    }
+    
+    public String getState(){
+        return state;
+    }
+    
+    private Memento memento;
+    
+    class Memento{
+        final String stateToSave;
+        
+        Memento(){
+            this.stateToSave =  state;
+        }
+        
+        String getState(){
+            return stateToSave;
+        }
+    }
+    
+    public void saveState(){
+        memento = new Memento();
+    }
+    
+    public void restoreState(){
+        this.state = memento.stateToSave;
+    }
+}

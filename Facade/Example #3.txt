@@ -1,0 +1,103 @@
+package study;
+
+import java.sql.*;
+
+
+public class Study {
+    
+    public static void main(String[] args) {
+        String tableName = "Employee";
+        //generate MySql HTML report and Oracle PDF report without using facade
+        Connection con = MySqlHelper.getMySqlDBconnection();
+        MySqlHelper mySqlHelper = new MySqlHelper();
+        mySqlHelper.generateMySqlHTMLReport(tableName, con);
+        
+        Connection con1 = OracleHelper.getOracleDBConnection();
+        OracleHelper oracleHelper = new OracleHelper();
+        oracleHelper.generateOraclePDFReport(tableName, con);
+        
+        //generate MySql HTML report and Oracle PDF report with using facade
+        HelperFacade.generateReport(HelperFacade.DBtypes.MYSQL, HelperFacade.ReportTypes.HTML, tableName);
+        HelperFacade.generateReport(HelperFacade.DBtypes.ORACLE, HelperFacade.ReportTypes.PDF, tableName);
+    }
+    
+}
+
+
+class MySqlHelper {
+    
+    public static Connection getMySqlDBconnection() {
+        //get MySql DB connection using connection parameters
+        return null;
+    }
+    
+    public void  generateMySqlPDFReport(String tableName, Connection con) {
+        //get data from table and generate pdf report
+    }
+    
+    public void generateMySqlHTMLReport (String tableName, Connection con) {
+        //get data from table and generate html report
+    }
+    
+}
+
+
+
+class OracleHelper {
+    
+    public static Connection getOracleDBConnection(){
+        //get MySql DB connection using connection parameters
+        return null;
+    }
+    
+        public void  generateOraclePDFReport(String tableName, Connection con) {
+        //get data from table and generate pdf report
+    }
+    
+    public void generateOracleHTMLReport (String tableName, Connection con) {
+        //get data from table and generate html report
+    }
+    
+}
+
+
+class HelperFacade {
+    
+    public static void generateReport(DBtypes dbType, ReportTypes reportType, String tableName) {
+        Connection con = null;
+        switch(dbType) {
+            case MYSQL:
+                con = MySqlHelper.getMySqlDBconnection();
+                MySqlHelper mySqlHelper = new MySqlHelper();
+                switch(reportType) {
+                    case HTML:
+                        mySqlHelper.generateMySqlHTMLReport(tableName, con);
+                        break;
+                    case PDF:
+                        mySqlHelper.generateMySqlPDFReport(tableName, con);
+                        break;
+                }
+                break;
+            case ORACLE:
+                con = OracleHelper.getOracleDBConnection();
+                OracleHelper oracleHelper = new OracleHelper();
+                switch(reportType) {
+                    case HTML:
+                        oracleHelper.generateOracleHTMLReport(tableName, con);
+                        break;
+                    case PDF:
+                        oracleHelper.generateOraclePDFReport(tableName, con);
+                        break;
+                }
+        }
+    }
+    
+    public static enum DBtypes {
+        MYSQL, ORACLE;
+    }
+    
+    public static enum ReportTypes {
+        HTML, PDF
+    }
+    
+}

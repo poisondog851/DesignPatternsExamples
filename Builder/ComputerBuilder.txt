@@ -1,0 +1,121 @@
+package test;
+
+
+public class Test {
+    
+    public static void main (String [] args) {
+        Director director = new Director();
+        director.setBuilder(new CheapComputerBuilder());
+        director.constructComputer();
+        Computer cheapComputer = director.getComputer();
+        System.out.println(cheapComputer);
+    }
+    
+}
+
+
+class Computer {
+    
+    private String display, systemBlock, manipulators;
+    
+    public void setDisplay(String display) {
+        this.display = display;
+    }
+    
+    public void setSystemBlock(String systemBlock) {
+        this.systemBlock = systemBlock;
+    }
+    
+    public void setManipulators(String manipulators) {
+        this.manipulators = manipulators;
+    }
+    
+    public String getDisplay() {
+        return display;
+    }
+    
+    public String getSystemBlock() {
+        return systemBlock;
+    }
+    
+    public String getManipulators() {
+        return manipulators;
+    }
+    
+    @Override
+    public String toString(){
+        return "Display:"+(display==null?"No":display)
+                +"\nSytem block: "+(systemBlock==null?"No":systemBlock)
+                +"\nManipulators: "+(systemBlock==null?"No":manipulators);
+    }
+    
+}
+
+
+
+interface ComputerBuilder {
+    
+    public Computer getComputer();
+    public void createNewComputer();
+    public void buildSystemBlock();
+    public void buildManipulators();
+    public void buildDisplay();
+    
+}
+
+
+
+class CheapComputerBuilder implements ComputerBuilder {
+    
+    Computer computer;
+
+    @Override
+    public Computer getComputer() {
+        return computer;
+    }
+
+    @Override
+    public void createNewComputer() {
+        this.computer = new Computer();
+    }
+
+    @Override
+    public void buildSystemBlock() {
+        computer.setSystemBlock("everest");
+    }
+
+    @Override
+    public void buildManipulators() {
+        computer.setDisplay("CRT");
+    }
+
+    @Override
+    public void buildDisplay() {
+        computer.setManipulators("mouse + keyboard");
+    }
+    
+}
+
+
+
+
+class Director {
+    
+    ComputerBuilder builder;
+    
+    public void setBuilder(ComputerBuilder builder) {
+        this.builder = builder;
+    }
+    
+    public Computer getComputer() {
+        return builder.getComputer();
+    }
+    
+    public void constructComputer() {
+        builder.createNewComputer();
+        builder.buildDisplay();
+        builder.buildManipulators();
+        builder.buildSystemBlock();
+    }
+    
+}
